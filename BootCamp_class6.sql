@@ -1,8 +1,4 @@
-﻿-- 사용방법: 
--- 번호 순서대로 해당하는 쿼리를 마우스로 드래그 후 Execute (또는 F5키) 로 한개씩 실행하기
-
-
--- 1. 데이터베이스 생성하기
+﻿-- 1. 데이터베이스 생성하기
 IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'BootCamp_ch6')
   BEGIN
     CREATE DATABASE [BootCamp_ch6]
@@ -35,9 +31,46 @@ VALUES
 ;
 
 -- 5. 데이터 쿼리 작성하기 (클래스 내용을 여기에 작성해보세요)
-SELECT gender, AVG(cast(age as float)) as avg_age
+
+-- 1) 성인 고객들의 gender, age
+SELECT gender, age 
+FROM Customer
+WHERE adult='Y';
+
+-- 2) 성인 고객들의 gender와 gender별 평균 age
+SELECT gender, AVG(age) as mean_age
 FROM Customer
 WHERE adult='Y'
 GROUP BY gender;
--- 예시 (;를 마지막에 꼭 넣어주세요!)
-SELECT * FROM Customer;
+
+-- 3) 성인 고객들의 gender와 gender별 평균 age, 최소 age
+SELECT gender, AVG(age) as average, MIN(age) as minimum
+FROM Customer
+WHERE adult='Y'
+GROUP BY gender
+ORDER BY gender DESC;
+
+-- 4) 성인 고객들의 gender와 gender별 평균 age를 가지고 오되 성별 별 최소연령이 19세 이상
+SELECT gender, AVG(age) as average
+FROM Customer
+WHERE adult='Y'
+GROUP BY gender HAVING MIN(age) >19
+ORDER BY gender DESC;
+
+-- HAVING 조건을 만족하지 못하는 GROUP은 제외시켜 버린다.
+SELECT gender, AVG(age) as average
+FROM Customer
+WHERE adult='Y'
+GROUP BY gender HAVING MIN(age) >27
+ORDER BY gender DESC;
+
+-- 5) 소수점 표현법
+SELECT gender, AVG(age) as average
+FROM Customer
+WHERE adult='Y'
+GROUP BY gender;
+
+SELECT gender, AVG(cast(age as float)) as average 
+FROM Customer
+WHERE adult='Y'
+GROUP BY gender;
