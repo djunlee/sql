@@ -1,8 +1,4 @@
-﻿-- 사용방법: 
--- 번호 순서대로 해당하는 쿼리를 마우스로 드래그 후 Execute (또는 F5키) 로 한개씩 실행하기
-
-
--- 1. 데이터베이스 생성하기
+﻿-- 1. 데이터베이스 생성하기
 IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'BootCamp_ch7')
   BEGIN
     CREATE DATABASE [BootCamp_ch7]
@@ -34,38 +30,83 @@ VALUES
 ;
 
 -- 5. 데이터 쿼리 작성하기 (클래스 내용을 여기에 작성해보세요)
-SELECT Name, Brand, Price as 가격
-FROM Product
-WHERE Brand = 'Apple' or Brand = 'Samsung';
 
-SELECT Name, Brand, Price as 가격
-FROM Product
-WHERE Brand in ('Apple','Samsung');
-
-SELECT count(*) as tot_number
+--1) AS
+SELECT COUNT(*) AS total_number
 FROM Product;
 
-SELECT count(*) as num_of_SamsungAccessory
+--2) AND, OR
+SELECT COUNT(*) as count
 FROM Product
-WHERE Category = 'Accessory' and Brand ='Samsung';
+WHERE Category = 'Accessory'
+	AND Brand = 'Samsung';
 
-SELECT distinct Category, brand
-FROM Product;
-
-SELECT distinct Category, brand
-FROM Product;
-
-SELECT Name, Brand, Price
+SELECT COUNT(*) as count
 FROM Product
-WHERE Brand LIKE 'A%';
+WHERE Category = 'Accessory'
+	OR Brand = 'Samsung';
 
+--3) DISTINCT, 고유값
+SELECT DISTINCT *
+FROM Product
+
+SELECT DISTINCT Brand, Category
+FROM Product
+
+SELECT DISTINCT Category, Brand
+FROM Product
+
+--4) LIKE, 단어의 패턴 인식
+SELECT DISTINCT Name
+FROM Product
+WHERE Name = 'Speaker'
+
+SELECT DISTINCT Name
+FROM Product
+WHERE Name  LIKE 'Speaker'
+
+SELECT DISTINCT Brand
+FROM Product
+WHERE Brand  LIKE 'A____'
+
+SELECT DISTINCT Brand
+FROM Product
+WHERE Brand  LIKE 'A%' 
+
+SELECT DISTINCT Name, Brand
+FROM Product
+WHERE Brand LIKE 'Apple' or Brand LIKE 'Samsung'
+
+SELECT DISTINCT Name
+FROM Product
+WHERE Name LIKE '%p'
+
+SELECT DISTINCT Name
+FROM Product
+WHERE Name LIKE 'D%p'
+
+SELECT DISTINCT Name
+FROM Product
+WHERE Name NOT LIKE 'D%p'
+
+--5) (NOT) IN
+SELECT DISTINCT Name, Brand
+FROM Product
+WHERE Name = 'Laptop'
+	OR Name = 'Desktop'
+
+SELECT DISTINCT Name, Brand
+FROM Product
+WHERE Name IN('Laptop', 'Desktop')
+
+--6) CASE WHEN
+SELECT DISTINCT * FROM Product;
+
+-- 고가, 중간가, 저가 판단
 SELECT 
-	CASE
-	WHEN Price > 100000 THEN 'expensive'
-	WHEN Price > 10000  THEN 'moderate'
-	else 'cheap'
-	END as criterion
+DISTINCT Name, price,
+CASE 
+WHEN Price > 1000000 THEN 'expensive'
+WHEN Price > 100000 THEN 'moderate'
+ELSE 'cheap' END as price_category
 FROM Product;
-
--- 예시 (;를 마지막에 꼭 넣어주세요!)
-SELECT * FROM Product;
