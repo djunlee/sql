@@ -1,7 +1,4 @@
-﻿-- 사용방법: 
--- 번호 순서대로 해당하는 쿼리를 마우스로 드래그 후 Execute (또는 F5키) 로 한개씩 실행하기
-
--- 1. 데이터베이스 생성하기
+﻿-- 1. 데이터베이스 생성하기
 IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'BootCamp_ch9')
   BEGIN
     CREATE DATABASE [BootCamp_ch9]
@@ -90,60 +87,44 @@ VALUES
 
 
 -- 7. 데이터 쿼리 작성하기 (클래스 내용을 여기에 작성해보세요)
-
-SELECT town
-FROM Customer
-
-UNION ALL
-
-SELECT city
-FROM Sales;
-
-SELECT town
-FROM Customer
-
-UNION 
-
-SELECT city
-FROM Sales;
-
-SELECT town
-FROM Customer
-
-INTERSECT 
-
-SELECT city
-FROM Sales;
-
-
-
-
-
-
--- Q1. Customer 테이블과 Sales 테이블에서 중복되는 도시는?
-
-SELECT town
-FROM customer
-INTERSECT
-SELECT city
-FROM Sales;
-
--- Q2. Customer 테이블에 있지만 Sales 테이블에서 없는 도시는?
-
-SELECT town
-FROM customer
-EXCEPT
-SELECT city
-FROM Sales;
-
--- Q3. 40살 미만인 고객이 있는 마을을 제외한 판매 테이블의 도시 리스트
-
-SELECT city
-FROM Sales
-Except
-SELECT town
-FROM Customer WHERE age<40;
-
--- 예시 (;를 마지막에 꼭 넣어주세요!)
 SELECT * FROM Customer;
 SELECT * FROM Sales;
+
+-- 수평이 아닌(JOIN), 수직으로 연결하는것이 목적
+
+--1) UNION ALL
+-- 중복값 허용
+SELECT town FROM Customer
+UNION ALL
+SELECT city FROM Sales;
+
+--2) UNION
+-- 중복값 허용 X
+-- DISTICNT 문은 하나의 TABLE에서 중복값 허용 X
+SELECT town FROM Customer
+UNION 
+SELECT city FROM Sales;
+
+--3) INTERSECT
+-- 중복값만 출력
+SELECT town FROM Customer
+INTERSECT
+SELECT city FROM Sales;
+
+--4) MINUS(Except)
+-- Customer 테이블에 있지만 Sales 테이블에서 없는 도시?
+-- 마찬가지로 중복되지 않은 값을 가짐
+SELECT town FROM Customer
+EXCEPT
+SELECT city FROM Sales;
+
+--Q) 40살 미만인 고객이 있는 마을을 제외한 판매 테이블의 도시 리스트
+-- Sales의 도시가 모두 Customer에 있다고 보장할 수 없다.
+-- 따라서, 도출된 도시가 40살 이상인 고객이 있다고 확실 불가.
+SELECT * FROM Customer;
+SELECT * FROM Sales;
+
+SELECT city From Sales
+EXCEPT
+SELECT town FROM Customer
+WHERE age < 40;
