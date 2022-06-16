@@ -50,4 +50,64 @@ VALUES
 SELECT * FROM Activity;
 
 -- Q) 페이스북은 각 월별로 얼마나 사람들이 친구 수락을 하였는지 알고 싶어한다.
--- 각 월별로 친구 수락한 횟수 기록
+
+SELECT *, MONTH(Activity_date) as Activity_Month
+FROM Activity
+WHERE Activity_type ='Accept'
+ORDER BY Activity_Month
+
+SELECT MONTH(Activity_date) as Activity_Month, count(*) as num
+FROM Activity
+WHERE Activity_type ='Accept'
+GROUP BY MONTH(Activity_date)
+
+
+
+
+-- ** 풀이 과정 **
+-- 1) 친구 수락한 경우만 세기
+-- 2) 날짜를 월별로 바꿔주기
+-- 3) CASE WHEN 구문을 사용해 친구수락 합 구하기
+-- 4) 월별로 그룹화
+
+SELECT * FROM Activity;
+
+-- 1) 
+SELECT *
+FROM Activity
+WHERE Activity_type = 'Accept';
+
+-- 2)
+SELECT *, MONTH(Activity_date) as Activity_Month
+FROM Activity
+WHERE Activity_type = 'Accept';
+
+--3)
+SELECT
+MONTH(Activity_date) as Activity_Month,
+SUM(
+CASE WHEN Activity_type = 'Accept' THEN 1
+ELSE 0 END) as Accept_num
+FROM Activity
+GROUP BY MONTH(Activity_date)
+
+
+
+-- 풀이)
+SELECT
+	*,
+	MONTH(Activity_date) as Activity_month,
+	CASE WHEN
+		Activity_type = 'Accept' THEN 1 ELSE 0 END
+	as Accept_num
+FROM Activity
+
+
+SELECT
+	MONTH(Activity_date) as Activity_month,
+	SUM(
+	CASE WHEN
+		Activity_type = 'Accept' THEN 1 ELSE 0 END)
+	as Accept_num
+FROM Activity
+GROUP BY MONTH(Activity_date);
