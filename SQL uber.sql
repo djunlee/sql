@@ -70,11 +70,9 @@ ORDER BY User_Name;
 SELECT DISTINCT User_Name
 FROM Orders
 WHERE Service_type = 'Premium'
-GROUP BY User_Name;
 
 --2.
 -- 날짜 고려 필수
-SELECT * FROM Orders;
 
 SELECT User_name, COUNT(DISTINCT Service_type) as Num_of_service
 FROM Orders
@@ -100,12 +98,6 @@ HAVING COUNT(DISTINCT Service_type) = 2;
 --1) 전체 테이블을 프리미엄, 베이직을 구분해 두 테이블로 분리
 --2) 프리미엄 테이블 유저 이름에서 베이직 서비스 유저 이름 제외
 --3) EXCEPT문을 사용해서 자동으로 고유값 도출
-
-SELECT * FROM Orders
-WHERE Service_type = 'Premium'
-EXCEPT
-SELECT * FROM Orders
-WHERE Service_type = 'basic'
 
 SELECT User_Name FROM Orders
 WHERE Service_type = 'Premium'
